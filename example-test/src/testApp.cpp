@@ -57,6 +57,12 @@ void testApp::setup()
 		
 		v = ofxValue();
 		assert(v.isNull());
+		
+		v = 42.0f;
+		assert(v.as<long>() == 42);
+		assert(v.as<int>() == 42);
+		assert(v.as<double>() == 42);
+		assert(v.as<string>() == "42");
 	}
 	
 	{
@@ -168,6 +174,9 @@ void testApp::setup()
 		v["submap"]["1"] = 10;
 		v["submap"]["2"] = 10;
 		
+		assert(v.hasKey("submap"));
+		assert(v["submap"].hasKey("0"));
+		
 		for (int i = 0; i < 3; i++)
 		{
 			assert(v["submap"][ofToString(i)] == 10);
@@ -198,11 +207,9 @@ void testApp::setup()
 		v["array"][4]["test1"] = 70;
 		v["array"][4]["test2"] = 80;
 		
-		string d = v.toJson();
-		cout << d << endl;
-		
-		ofxValue s = ofxValue::fromJson(d);
-		assert(d == s.toJson());
+		string d = v.toJSON();
+		ofxValue s = ofxValue::fromJSON(d);
+		assert(d == s.toJSON());
 	}
 	
 	cout << "TEST PASSED" << endl;

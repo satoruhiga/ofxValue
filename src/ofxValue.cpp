@@ -62,7 +62,7 @@ static string to_json(ofxValue& v, int indent_level)
 	return "";
 }
 
-string ofxValue::toJson()
+string ofxValue::toJSON()
 {
 	return to_json(*this, 0);
 }
@@ -102,7 +102,7 @@ static ofxValue from_json(picojson::value j)
 	return v;
 }
 
-ofxValue ofxValue::fromJson(string json)
+ofxValue ofxValue::fromJSON(string json)
 {
 	value j;
 	string err;

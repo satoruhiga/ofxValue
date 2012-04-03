@@ -56,8 +56,10 @@ public:
 	inline bool isString() const { return type == STRING_TYPE; }
 	inline bool isArray() const { return type == ARRAY_TYPE; }
 	inline bool isMap() const { return type == MAP_TYPE; }
+
+	inline const size_t size() const;
 	
-	// Array utilitys
+	// Array utilities
 	
 	inline ArrayType& array() { assert(isArray()); return *array_; }
 	
@@ -67,19 +69,18 @@ public:
 	inline ofxValue pop();
 	inline ofxValue remove(size_t index);
 	
-	inline const size_t size() const;
-	inline bool hasKey(const string& key) const;
 
-	// Map utilitys
+	// Map utilities
 	
 	inline MapType& map() { assert(isMap()); return *map_; }
 	
 	inline ofxValue& operator[](const string& key);
 	
 	inline ofxValue remove(const string &key);
+	inline bool hasKey(const string& key) const;
+	
 	inline vector<string> keys() const;
 	inline vector<ofxValue> values() const;
-	
 	
 	// operators
 	
@@ -118,10 +119,10 @@ public:
 	template<typename T> 
 	friend inline bool operator<=(const T& o, const ofxValue& v) { return !operator>(o, v); }
 	
-	// serialization
+	// json serialization
 	
-	string toJson();
-	static ofxValue fromJson(string json);
+	string toJSON();
+	static ofxValue fromJSON(string json);
 	
 protected:
 
