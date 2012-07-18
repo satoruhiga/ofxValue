@@ -102,7 +102,7 @@ static ofxValue from_json(picojson::value j)
 	return v;
 }
 
-ofxValue ofxValue::fromJSON(string json)
+bool ofxValue::fromJSON(string json, ofxValue& v)
 {
 	value j;
 	string err;
@@ -112,8 +112,9 @@ ofxValue ofxValue::fromJSON(string json)
 	{
 		ofLogError("ofxValue", "json parse error");
 		cout << err << endl;
-		return ofxValue();
+		return false;
 	}
 	
-	return from_json(j);
+	v = from_json(j);
+	return true;
 }

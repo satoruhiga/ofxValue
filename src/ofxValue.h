@@ -45,8 +45,8 @@ public:
 	
 	inline void reset() { clear(); }
 	
-	template <class T> inline T as() const;
-	template <class T> inline bool is() const;
+	template <class T> inline T as() const {}
+	template <class T> inline bool is() const {}
 	
 	inline bool isNull() const { return type == NULL_TYPE; }
 	inline bool isNumber() const;
@@ -122,7 +122,7 @@ public:
 	// json serialization
 	
 	string toJSON();
-	static ofxValue fromJSON(string json);
+	static bool fromJSON(string json, ofxValue& value);
 	
 protected:
 
