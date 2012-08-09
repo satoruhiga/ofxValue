@@ -123,6 +123,10 @@ public:
 	
 	string toJSON();
 	static bool fromJSON(string json, ofxValue& value);
+	static ofxValue fromJSON(string json);
+		
+	bool load(string path);
+	void save(string path);
 	
 protected:
 
@@ -345,6 +349,42 @@ template<> inline float ofxValue::as() const
 	return 0;
 }
 
+template<> inline char ofxValue::as() const
+{
+	if (isNumber()) return number_;
+	else if (isString()) return ofToInt(*string_);
+	
+	ofLogError("ofxValue", "invalid cast");
+	return 0;
+}
+
+template<> inline unsigned char ofxValue::as() const
+{
+	if (isNumber()) return number_;
+	else if (isString()) return ofToInt(*string_);
+	
+	ofLogError("ofxValue", "invalid cast");
+	return 0;
+}
+
+template<> inline short ofxValue::as() const
+{
+	if (isNumber()) return number_;
+	else if (isString()) return ofToInt(*string_);
+	
+	ofLogError("ofxValue", "invalid cast");
+	return 0;
+}
+	
+template<> inline unsigned short ofxValue::as() const
+{
+	if (isNumber()) return number_;
+	else if (isString()) return ofToInt(*string_);
+	
+	ofLogError("ofxValue", "invalid cast");
+	return 0;
+}
+
 template<> inline int ofxValue::as() const
 {
 	if (isNumber()) return number_;
@@ -354,7 +394,25 @@ template<> inline int ofxValue::as() const
 	return 0;
 }
 
+template<> inline unsigned int ofxValue::as() const
+{
+	if (isNumber()) return number_;
+	else if (isString()) return ofToInt(*string_);
+	
+	ofLogError("ofxValue", "invalid cast");
+	return 0;
+}
+
 template<> inline long ofxValue::as() const
+{
+	if (isNumber()) return number_;
+	else if (isString()) return ofToInt(*string_);
+	
+	ofLogError("ofxValue", "invalid cast");
+	return 0;
+}
+	
+template<> inline unsigned long ofxValue::as() const
 {
 	if (isNumber()) return number_;
 	else if (isString()) return ofToInt(*string_);

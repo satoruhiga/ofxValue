@@ -118,3 +118,22 @@ bool ofxValue::fromJSON(string json, ofxValue& v)
 	v = from_json(j);
 	return true;
 }
+
+ofxValue ofxValue::fromJSON(string json)
+{
+	ofxValue v;
+	fromJSON(json, v);
+	return v;
+}
+
+bool ofxValue::load(string path)
+{
+	return fromJSON(ofBufferFromFile(path).getText(), *this);
+}
+
+void ofxValue::save(string path)
+{
+	string json = toJSON();
+	ofBuffer buf((const char*)json.data(), json.size());
+	ofBufferToFile(path, buf);
+}

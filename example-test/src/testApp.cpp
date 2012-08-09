@@ -18,14 +18,17 @@ void testApp::setup()
 		v = 42L;
 		assert(!v.is<int>());
 		assert(v.is<long>());
+		assert(v.isInteger());
 		
 		v = 42.f;
 		assert(!v.is<int>());
 		assert(v.is<float>());
+		assert(v.isFloatingPoint());
 		
 		v = 42.0;
 		assert(!v.is<float>());
 		assert(v.is<double>());
+		assert(v.isFloatingPoint());
 		
 		v = false;
 		assert(!v.is<string>());
@@ -59,8 +62,14 @@ void testApp::setup()
 		assert(v.isNull());
 		
 		v = 42.0f;
-		assert(v.as<long>() == 42);
+		assert(v.as<char>() == 42);
+		assert(v.as<unsigned char>() == 42);
+		assert(v.as<short>() == 42);
+		assert(v.as<unsigned short>() == 42);
 		assert(v.as<int>() == 42);
+		assert(v.as<unsigned int>() == 42);
+		assert(v.as<long>() == 42);
+		assert(v.as<unsigned long>() == 42);
 		assert(v.as<double>() == 42);
 		assert(v.as<string>() == "42");
 	}
