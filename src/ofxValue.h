@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ofMain.h"
+#include <assert.h>
 
 class ofxValue
 {
@@ -245,6 +246,7 @@ inline const size_t ofxValue::size() const
 	assert(isArray() || isMap());
 	if (isArray()) return array_->size();
 	else if (isMap()) return map_->size();
+	return 0;
 }
 
 inline bool ofxValue::hasKey(const string& key) const
