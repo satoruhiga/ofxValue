@@ -70,6 +70,17 @@ public:
 	inline ofxValue pop();
 	inline ofxValue remove(size_t index);
 	
+	template <class T> inline bool get(size_t index, T &v)
+	{
+		if (isArray() && index < size())
+		{
+			v = (*this)[index].as<T>();
+			return true;
+		}
+		
+		ofLogError("ofxValue") << "index bound out of range error";
+		return false;
+	}
 
 	// Map utilities
 	
@@ -82,6 +93,18 @@ public:
 	
 	inline vector<string> keys() const;
 	inline vector<ofxValue> values() const;
+	
+	template <class T> inline bool get(const string& key, T &v)
+	{
+		if (isMap() && hasKey(key))
+		{
+			v = (*this)[key].as<T>();
+			return true;
+		}
+		
+		ofLogError("ofxValue") << "key error";
+		return false;
+	}
 	
 	// operators
 	

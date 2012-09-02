@@ -165,6 +165,19 @@ void testApp::setup()
 		{
 			assert(((i + 1) * 100) == v[2][i]);
 		}
+		
+		
+		ofxValue d = ofxValue::Array();
+		d.push(1000);
+		d.push(2000);
+		d.push(3000);
+
+		int n;
+		assert(d.get(0, n));
+		assert(n == 1000);
+		
+		assert(d.get(1, n));
+		assert(n == 2000);
 	}
 	
 	{
@@ -174,6 +187,13 @@ void testApp::setup()
 		v["key0"] = 10;
 		v["key1"] = 20;
 		v["key2"] = 30;
+		
+		int n;
+		assert(v.get("key0", n));
+		assert(n == 10);
+		
+		assert(v.get("key2", n));
+		assert(n == 30);
 		
 		assert(v.keys().size() == 3);
 		assert(v["key0"] == 10);
