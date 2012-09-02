@@ -94,8 +94,8 @@ static ofxValue from_json(picojson::value j)
 		}
 	}
 	else if (j.is<bool>()) v = j.get<bool>();
-	else if (j.is<int>()) v = (int)j.get<double>();
 	else if (j.is<double>()) v = j.get<double>();
+	else if (j.is<int>()) v = (int)j.get<double>();
 	else if (j.is<string>()) v = j.get<string>();
 	else if (j.is<null>()) v = ofxValue();
 	
