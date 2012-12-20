@@ -22,18 +22,18 @@ protected:
 	};
 
 public:
-	
+
 	typedef vector<ofxValue> ArrayType;
 	typedef map<string, ofxValue> MapType;
-	
+
 	static ofxValue Array() { return ofxValue(ARRAY_TYPE); }
 	static ofxValue Map() { return ofxValue(MAP_TYPE); }
 
 	inline ofxValue() : type(NULL_TYPE), data_(NULL) {}
-	
+
 	inline ofxValue(const ofxValue& copy);
 	inline ofxValue& operator=(const ofxValue& copy);
-	
+
 	inline ofxValue(const bool& v) : type(BOOLEAN_TYPE), number_(v) {}
 	inline ofxValue(const int& v) : type(INT32_TYPE), number_(v) {}
 	inline ofxValue(const long& v) : type(INT64_TYPE), number_(v) {}
@@ -41,14 +41,14 @@ public:
 	inline ofxValue(const double& v) : type(DOUBLE_TYPE), number_(v) {}
 	inline ofxValue(const char* v) : type(STRING_TYPE), string_(new string(v)) {}
 	inline ofxValue(const string& v) : type(STRING_TYPE), string_(new string(v)) {}
-	
+
 	inline ~ofxValue() { clear(); }
-	
+
 	inline void reset() { clear(); }
-	
+
 	template <class T> inline T as() const {}
 	template <class T> inline bool is() const {}
-	
+
 	inline bool isNull() const { return type == NULL_TYPE; }
 	inline bool isNumber() const;
 	inline bool isInteger() const { return type == INT32_TYPE || type == INT64_TYPE; }
@@ -59,17 +59,17 @@ public:
 	inline bool isMap() const { return type == MAP_TYPE; }
 
 	inline const size_t size() const;
-	
+
 	// Array utilities
-	
-	inline ArrayType& array() { assert(isArray()); return *array_; }
-	
+
+	inline ArrayType& asArray() { assert(isArray()); return *array_; }
+
 	inline ofxValue& operator[](size_t index);
-	
+
 	inline ofxValue& push(const ofxValue& v);
 	inline ofxValue pop();
 	inline ofxValue remove(size_t index);
-	
+
 	template <class T> inline bool get(size_t index, T &v)
 	{
 		if (isArray() && index < size())
@@ -77,23 +77,23 @@ public:
 			v = (*this)[index].as<T>();
 			return true;
 		}
-		
+
 		ofLogError("ofxValue") << "index bound out of range error";
 		return false;
 	}
 
 	// Map utilities
-	
-	inline MapType& map() { assert(isMap()); return *map_; }
-	
+
+	inline MapType& asMap() { assert(isMap()); return *map_; }
+
 	inline ofxValue& operator[](const string& key);
-	
+
 	inline ofxValue remove(const string &key);
 	inline bool hasKey(const string& key) const;
-	
+
 	inline vector<string> keys() const;
 	inline vector<ofxValue> values() const;
-	
+
 	template <class T> inline bool get(const string& key, T &v)
 	{
 		if (isMap() && hasKey(key))
@@ -101,13 +101,13 @@ public:
 			v = (*this)[key].as<T>();
 			return true;
 		}
-		
+
 		ofLogError("ofxValue") << "key error";
 		return false;
 	}
-	
+
 	// operators
-	
+
 	friend inline bool operator==(const ofxValue& v1, const ofxValue& v2)
 	{
 		if (v1.isNull() && v2.isNull()) return true;
@@ -115,14 +115,14 @@ public:
 		else if (v1.isString() && v2.isString()) return *v1.string_ == *v2.string_;
 		throw;
 	}
-	
+
 	friend inline bool operator<(const ofxValue& v1, const ofxValue& v2)
 	{
 		if (v1.isNumber() && v2.isNumber()) return v1.number_ < v2.number_;
 		else if (v1.isString() && v2.isString()) return *v1.string_ < *v2.string_;
 		throw;
 	}
-	
+
 	friend inline bool operator>(const ofxValue& v1, const ofxValue& v2)
 	{
 		if (v1.isNumber() && v2.isNumber()) return v1.number_ > v2.number_;
@@ -130,32 +130,32 @@ public:
 		throw;
 	}
 
-	template<typename T> 
+	template<typename T>
 	friend inline bool operator==(const T& o, const ofxValue& v) { return v.as<T>() == o; }
-	template<typename T> 
+	template<typename T>
 	friend inline bool operator!=(const T& o, const ofxValue& v) { return !operator==(o, v); }
-	template<typename T> 
+	template<typename T>
 	friend inline bool operator>=(const T& o, const ofxValue& v) { return !operator<(o, v); }
-	template<typename T> 
+	template<typename T>
 	friend inline bool operator>(const T& o, const ofxValue& v) { return v.as<T>() > o; }
-	template<typename T> 
+	template<typename T>
 	friend inline bool operator<(const T& o, const ofxValue& v) { return v.as<T>() < o; }
-	template<typename T> 
+	template<typename T>
 	friend inline bool operator<=(const T& o, const ofxValue& v) { return !operator>(o, v); }
-	
+
 	// json serialization
-	
+
 	string toJSON();
 	static bool fromJSON(string json, ofxValue& value);
 	static ofxValue fromJSON(string json);
-		
+
 	bool load(string path);
 	void save(string path);
-	
+
 protected:
 
 	Type type;
-	
+
 	union
 	{
 		double number_;
@@ -164,7 +164,7 @@ protected:
 		MapType *map_;
 		void *data_;
 	};
-	
+
 	inline ofxValue(Type t) { init(t); }
 	inline ofxValue(const ArrayType& v) : type(ARRAY_TYPE) { array_ = new ArrayType(v); }
 	inline ofxValue(const MapType& v) : type(MAP_TYPE) { map_ = new MapType(v); }
@@ -180,7 +180,7 @@ protected:
 inline ofxValue ofxValue::remove(size_t index)
 {
 	assert(isArray());
-	
+
 	ofxValue v = array_->at(index);
 	array_->erase(array_->begin() + index);
 	return v;
@@ -189,10 +189,10 @@ inline ofxValue ofxValue::remove(size_t index)
 inline ofxValue ofxValue::remove(const string &key)
 {
 	assert(isMap());
-	
+
 	ofxValue v = (*map_)[key];
 	map_->erase(key);
-	
+
 	return v;
 }
 
@@ -230,16 +230,16 @@ inline vector<string> ofxValue::keys() const
 inline vector<ofxValue> ofxValue::values() const
 {
 	assert(isMap());
-	
+
 	vector<ofxValue> v;
 	MapType::iterator it = map_->begin();
-	
+
 	while (it != map_->end())
 	{
 		v.push_back((*it).second);
 		it++;
 	}
-	
+
 	return v;
 }
 
@@ -351,7 +351,7 @@ inline void ofxValue::clear()
 			break;
 	}
 #undef FREE
-	
+
 	type = NULL_TYPE;
 	data_ = NULL;
 }
@@ -369,7 +369,7 @@ template<> inline float ofxValue::as() const
 {
 	if (isNumber()) return number_;
 	else if (isString()) return ofToFloat(*string_);
-	
+
 	ofLogError("ofxValue", "invalid cast");
 	return 0;
 }
@@ -378,7 +378,7 @@ template<> inline char ofxValue::as() const
 {
 	if (isNumber()) return number_;
 	else if (isString()) return ofToInt(*string_);
-	
+
 	ofLogError("ofxValue", "invalid cast");
 	return 0;
 }
@@ -387,7 +387,7 @@ template<> inline unsigned char ofxValue::as() const
 {
 	if (isNumber()) return number_;
 	else if (isString()) return ofToInt(*string_);
-	
+
 	ofLogError("ofxValue", "invalid cast");
 	return 0;
 }
@@ -396,16 +396,16 @@ template<> inline short ofxValue::as() const
 {
 	if (isNumber()) return number_;
 	else if (isString()) return ofToInt(*string_);
-	
+
 	ofLogError("ofxValue", "invalid cast");
 	return 0;
 }
-	
+
 template<> inline unsigned short ofxValue::as() const
 {
 	if (isNumber()) return number_;
 	else if (isString()) return ofToInt(*string_);
-	
+
 	ofLogError("ofxValue", "invalid cast");
 	return 0;
 }
@@ -414,7 +414,7 @@ template<> inline int ofxValue::as() const
 {
 	if (isNumber()) return number_;
 	else if (isString()) return ofToInt(*string_);
-	
+
 	ofLogError("ofxValue", "invalid cast");
 	return 0;
 }
@@ -423,7 +423,7 @@ template<> inline unsigned int ofxValue::as() const
 {
 	if (isNumber()) return number_;
 	else if (isString()) return ofToInt(*string_);
-	
+
 	ofLogError("ofxValue", "invalid cast");
 	return 0;
 }
@@ -432,16 +432,16 @@ template<> inline long ofxValue::as() const
 {
 	if (isNumber()) return number_;
 	else if (isString()) return ofToInt(*string_);
-	
+
 	ofLogError("ofxValue", "invalid cast");
 	return 0;
 }
-	
+
 template<> inline unsigned long ofxValue::as() const
 {
 	if (isNumber()) return number_;
 	else if (isString()) return ofToInt(*string_);
-	
+
 	ofLogError("ofxValue", "invalid cast");
 	return 0;
 }
@@ -453,7 +453,7 @@ template<> inline bool ofxValue::as() const
 	else if (isString()) return *string_ != "";
 	else if (isArray()) return !array_->empty();
 	else if (isMap()) return !map_->empty();
-	
+
 	ofLogError("ofxValue", "invalid cast");
 	return false;
 }
@@ -466,7 +466,7 @@ template<> inline string ofxValue::as() const
 	else if (isNull()) return "(null)";
 	else if (isArray()) return "(Array)";
 	else if (isMap()) return "(Map)";
-	
+
 	ofLogError("ofxValue", "invalid cast");
 	return "";
 }

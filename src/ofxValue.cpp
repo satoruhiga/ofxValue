@@ -41,8 +41,8 @@ static string to_json(ofxValue& v, int indent_level)
 		indent_level++;
 		indent = string(indent_level * 4, ' ');
 		
-		ofxValue::MapType::iterator it = v.map().begin();
-		while (it != v.map().end())
+		ofxValue::MapType::iterator it = v.asMap().begin();
+		while (it != v.asMap().end())
 		{
 			s += indent + "\"" + (*it).first + "\": ";
 			s += to_json((*it).second, indent_level) + ",\n";
